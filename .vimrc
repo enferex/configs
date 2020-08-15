@@ -3,6 +3,7 @@ Plug 'scrooloose/nerdtree'
 Plug 'kien/ctrlp.vim'
 Plug 'majutsushi/tagbar'
 Plug 'vim-airline/vim-airline'
+Plug 'vim-airline/vim-airline-themes'
 Plug 'vim-syntastic/syntastic'
 Plug 'rhysd/vim-clang-format'
 Plug 'ycm-core/YouCompleteMe', {'do': './install.py --clang-completer'}
@@ -55,6 +56,9 @@ let g:cscope_silent = 1
 
 " IndentLines settings
 let g:indentLine_enabled = 0
+
+" Airline settings
+let g:airline_powerline_fonts = 1
 
 " Mappings
 nnoremap <leader>C :SyntasticCheck<CR> :SyntasticToggleMode<CR>
