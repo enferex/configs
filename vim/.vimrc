@@ -4,27 +4,29 @@ Plug 'majutsushi/tagbar'
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
 Plug 'rhysd/vim-clang-format'
-if has('nvim')
-  Plug 'neovim/nvim-lspconfig'
-  Plug 'glepnir/lspsaga.nvim'
-  Plug 'hrsh7th/nvim-compe'
-else
-  Plug 'vim-syntastic/syntastic'
-  Plug 'ycm-core/YouCompleteMe', {'do': './install.py --clang-completer'}
-endif
-Plug 'rust-lang/rust'
-Plug 'junegunn/seoul256.vim'
 Plug 'gruvbox-community/gruvbox'
-"Plug 'morhetz/gruvbox'
 Plug 'tomasr/molokai'
 Plug 'sickill/vim-monokai'
 Plug 'Yggdroot/indentLine'
 Plug 'airblade/vim-gitgutter'
 Plug 'tpope/vim-fugitive'
 Plug 'brookhong/cscope.vim'
-Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
-Plug 'junegunn/fzf.vim'
 Plug 'plasticboy/vim-markdown'
+Plug 'rust-lang/rust.vim'
+if has('nvim')
+  Plug 'neovim/nvim-lspconfig'
+  Plug 'glepnir/lspsaga.nvim'
+  Plug 'hrsh7th/cmp-nvim-lsp'
+  Plug 'hrsh7th/nvim-cmp'
+  Plug 'hrsh7th/vim-vsnip'
+  Plug 'hrsh7th/cmp-vsnip'
+  Plug 'hrsh7th/cmp-buffer'
+  Plug 'hrsh7th/cmp-path'
+  Plug 'hrsh7th/cmp-cmdline'
+  Plug 'nvim-lua/plenary.nvim' " For telescope
+  Plug 'nvim-telescope/telescope.nvim', { 'tag': '0.1.0' }
+  Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
+endif
 call plug#end()
 
 " Spacing and general vim settings
@@ -45,11 +47,6 @@ set t_Co=256
 set background=dark
 colorscheme gruvbox
 
-" YCM settings
-let g:ycm_confirm_extra_conf = 0
-let g:ycm_global_ycm_extra_conf = '~/.vim/.ycm_extra_conf.py'
-set completeopt=preview,menuone,noselect
-
 " Syntastic settings
 let g:syntastic_mode_map = {'mode': 'passive', 'active_filetypes': [], 'passive_filetypes': [] }
 let g:syntastic_always_populate_loc_list = 1
@@ -65,9 +62,6 @@ let g:indentLine_enabled = 1
 
 " Airline settings
 let g:airline_powerline_fonts = 1
-
-" FZF settings
-nmap <C-P> :FZF<CR>
 
 " Mappings
 nnoremap <leader>C :SyntasticCheck<CR> :SyntasticToggleMode<CR>
@@ -98,38 +92,28 @@ nnoremap  <leader>fe :call CscopeFind('e', expand('<cword>'))<CR>
 nnoremap  <leader>ff :call CscopeFind('f', expand('<cword>'))<CR>
 nnoremap  <leader>fi :call CscopeFind('i', expand('<cword>'))<CR>
 
-" LSP bindings
 if has('nvim')
-luafile ~/.vim/lsp_config.lua
-nnoremap <silent>K :Lspsaga hover_doc<CR>
+" LSP and CMP
+  luafile ~/.vim/cmp_config.lua
+  luafile ~/.vim/lsp_config2.lua
+  luafile ~/.vim/ts_config.lua
+
+" Other nvim plugin settings
+"  nnoremap <silent>K :Lspsaga hover_doc<CR>
+  nnoremap <leader>ff <cmd>Telescope find_files<cr>
+  nnoremap <leader>fg <cmd>Telescope live_grep<cr>
+  nnoremap <leader>fb <cmd>Telescope buffers<cr>
+  nnoremap <leader>fh <cmd>Telescope help_tags<cr>
 endif
 
-" Compe settings
-let g:compe = {}
-let g:compe.enabled = v:true
-let g:compe.autocomplete = v:true
-let g:compe.debug = v:false
-let g:compe.min_length = 1
-let g:compe.preselect = 'enable'
-let g:compe.throttle_time = 80
-let g:compe.source_timeout = 200
-let g:compe.resolve_timeout = 800
-let g:compe.incomplete_delay = 400
-let g:compe.max_abbr_width = 100
-let g:compe.max_kind_width = 100
-let g:compe.max_menu_width = 100
-let g:compe.documentation = v:true
-
-let g:compe.source = {}
-let g:compe.source.path = v:true
-let g:compe.source.buffer = v:true
-let g:compe.source.calc = v:true
-let g:compe.source.nvim_lsp = v:true
-let g:compe.source.nvim_lua = v:true
-let g:compe.source.vsnip = v:true
-let g:compe.source.ultisnips = v:true
-let g:compe.source.luasnip = v:true
-let g:compe.source.emoji = v:true
+" Clean up whitespace (https://idie.ru/posts/vim-modern-cpp#removing-trailing-whitespaces)
+highlight ExtraWhitespace ctermbg=white guibg=red
+match ExtraWhitespace /\s\+$/
+au BufWinEnter * match ExtraWhitespace /\s\+$/
+au InsertEnter * match ExtraWhitespace /\s\+\%#\@<!$/
+au InsertLeave * match ExtraWhitespace /\s\+$/
+au BufWinLeave * call clearmatches()
+nnoremap <silent> <leader>rs :let _s=@/ <Bar> :%s/\s\+$//e <Bar> :let @/=_s <Bar> :nohl <Bar> :unlet _s <CR>
 
 " Continue where you left off.
 autocmd BufReadPost *
