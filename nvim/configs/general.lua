@@ -8,6 +8,7 @@ vim.opt.signcolumn = 'yes'
 vim.g.have_nerd_font = true
 
 -- Show whitespace characters
+-- Highlight trailing whitespace (thanks to reddit user shmerl)
 vim.opt.list = true
 vim.opt.listchars = { tab = '» ', trail = '·', nbsp = '␣' }
 vim.api.nvim_set_hl(0, "TrailingWhitespace", { bg = 'red' })
