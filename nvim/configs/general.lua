@@ -2,9 +2,9 @@
 
 vim.cmd('colorscheme gruvbox')
 vim.opt.number = true
-vim.opt.signcolumn = 'yes'
 vim.opt.cursorline = true
 vim.opt.colorcolumn = '80'
+vim.opt.signcolumn = 'yes'
 vim.g.have_nerd_font = true
 
 -- Show whitespace characters
@@ -41,14 +41,8 @@ vim.opt.undofile = true
 vim.opt.winborder = 'rounded'
 
 -- Keybindings
-vim.keymap.set('n', '<leader>T', ':TagbarOpenAutoClose<cr>')
 vim.keymap.set('n', '<leader>n', ':tabnext<cr>')
 vim.keymap.set('n', '<leader>p', ':tabprev<cr>')
 vim.keymap.set('n', '<leader>s', ':mks!<cr>')
-vim.keymap.set('n', '<leader>I', ':IndentLinesToggle<cr>')
 vim.keymap.set('n', '<leader>F', ':copen<CR>')
 vim.keymap.set('n', '<leader>f', ':cclose<CR>')
-vim.keymap.set('n', '<leader>ff', '<cmd>Telescope find_files<cr>')
-vim.keymap.set('n', '<leader>fg', '<cmd>Telescope live_grep<cr>')
-vim.keymap.set('n', '<leader>fb', '<cmd>Telescope buffers<cr>')
-vim.keymap.set('n', '<leader>fh', 'cmd>Telescope help_tags<cr>')
